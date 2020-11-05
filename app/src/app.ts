@@ -6,8 +6,12 @@ import session from 'express-session';
 import flash from 'connect-flash';
 import dotenv from 'dotenv';
 import nunjucks from 'nunjucks';
-import pageRouter from './routes/page';
 import { Connection, createConnection } from 'typeorm';
+import passport from 'passport';
+
+import pageRouter from './routes/page';
+import authRouter from './routes/auth';
+import passportConfig from './passport';
 
 interface HttpError extends Error {
     status?: number;
@@ -21,6 +25,8 @@ createConnection()
         console.log('Entity connected: ', connection.isConnected);
 
         const app = express();
+
+        passportConfig(passport);
 
         app.set('view engine', 'html');
         nunjucks.configure('src/views', {
@@ -53,8 +59,13 @@ createConnection()
         }));
         // represent one-time message
         app.use(flash());
+        // 요청에 passport 설정을 심는다.
+        app.use(passport.initialize());
+        // req.session 객체에 passport 정보를 저장한다.
+        app.use(passport.session());
 
         app.use('/', pageRouter);
+        app.use('/auth', authRouter);
 
         app.use((req, res, next) => {
             const err: HttpError = new Error('Not Found');
