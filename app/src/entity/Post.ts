@@ -7,10 +7,10 @@ export class Post {
     @PrimaryGeneratedColumn()
     id!: number;
 
-    @Column({ length: 140, nullable: true })
+    @Column({ length: 140 })
     content!: string;
 
-    @Column({ length: 200 })
+    @Column({ length: 200, nullable: true })
     img!: string;
 
     @CreateDateColumn({ name: 'created_at' })

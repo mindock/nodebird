@@ -1,5 +1,4 @@
-import { Entity, Column, PrimaryColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, PrimaryGeneratedColumn, OneToMany, ManyToMany, ManyToOne, JoinTable } from "typeorm";
-import { JoinAttribute } from "typeorm/query-builder/JoinAttribute";
+import { Entity, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, PrimaryGeneratedColumn, OneToMany, ManyToMany, JoinTable } from "typeorm";
 import { Post } from "./Post";
 
 @Entity()
@@ -7,19 +6,19 @@ export class User {
     @PrimaryGeneratedColumn()
     id!: number;
 
-    @Column({ length: 40, unique: true })
+    @Column({ length: 40, unique: true, nullable: true })
     email!: string;
 
-    @Column({ length: 15, nullable: true })
+    @Column({ length: 15 })
     nick!: string;
 
-    @Column({ length: 100 })
+    @Column({ length: 100, nullable: true })
     password!: string;
 
-    @Column({ length: 10, nullable: true, default: 'local' })
+    @Column({ length: 10, default: 'local' })
     provider!: string;
 
-    @Column({ length: 30 })
+    @Column({ length: 30, nullable: true })
     snsId!: string;
 
     @CreateDateColumn({ name: 'created_at' })
