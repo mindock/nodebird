@@ -1,30 +1,36 @@
-import { PassportStatic } from "passport";
+import { PassportStatic } from 'passport';
 import { Strategy } from 'passport-kakao';
-import { User } from "../entity/User";
+import User from '../entity/User';
 
 export default (passport: PassportStatic) => {
-    passport.use(new Strategy({
+  passport.use(
+    new Strategy(
+      {
         clientID: process.env.KAKAO_ID!,
         clientSecret: process.env.KAKAO_SECRET!,
         callbackURL: '/auth/kakao/callback',
-    }, async (accessToken, refreshToken, profile, done) => {
+      },
+      async (accessToken, refreshToken, profile, done) => {
         try {
-            const user = await User.findOne({ snsId: profile.id, provider: 'kakao' });
-            if (user) {
-                return done(null, user);
-            }
+          const user = await User.findOne({ snsId: profile.id, provider: 'kakao' });
+          if (user) {
+            return done(null, user);
+          }
 
-            const newUser = User.create({
-                email: profile._json && profile._json.kakao_account.email,
-                nick: profile.displayName,
-                snsId: profile.id,
-                provider: profile.provider,
-            })
-            await newUser.save();
-            return done(null, newUser);
+          const newUser = User.create({
+            // eslint-disable-next-line no-underscore-dangle
+            email: profile._json && profile._json.kakao_account.email,
+            nick: profile.displayName,
+            snsId: profile.id,
+            provider: profile.provider,
+          });
+          await newUser.save();
+          return done(null, newUser);
         } catch (err) {
-            console.error(err);
-            return done(err);
+          console.error(err);
+          return done(err);
         }
-    }));
+      }
+    )
+  );
 };

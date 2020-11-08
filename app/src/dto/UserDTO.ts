@@ -1,5 +1,5 @@
 export interface JoinUserDTO {
-    email: string;
-    nick: string;
-    password: string;
+  email: string;
+  nick: string;
+  password: string;
 }

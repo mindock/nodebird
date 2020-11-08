@@ -1,23 +1,31 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { Post } from "./Post";
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import Post from './Post';
 
 @Entity()
-export class Hashtag {
-    @PrimaryGeneratedColumn()
-    id!: number;
+export default class Hashtag {
+  @PrimaryGeneratedColumn()
+  id!: number;
 
-    @Column({ length: 15, unique: true })
-    title!: string;
+  @Column({ length: 15, unique: true })
+  title!: string;
 
-    @CreateDateColumn({ name: 'created_at' })
-    createdAt!: Date;
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt!: Date;
 
-    @UpdateDateColumn({ name: 'updated_at' })
-    updatedAt!: Date;
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt!: Date;
 
-    @DeleteDateColumn({ name: 'deleted_at' })
-    deletedAt!: Date;
+  @DeleteDateColumn({ name: 'deleted_at' })
+  deletedAt!: Date;
 
-    @ManyToMany(type => Post, post => post.hashtags)
-    posts!: Post[];
+  @ManyToMany(() => Post, (post) => post.hashtags)
+  posts!: Post[];
 }
